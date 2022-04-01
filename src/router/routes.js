@@ -10,11 +10,16 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-  if (store().getters['auth/isAuthenticated']) {
+  // if (store().getters['auth/isAuthenticated']) {
+  //   next()
+  //   return
+  // }
+  // next('/auth/login')
+  if (!store().getters['auth/isAuthenticated']) {
     next()
     return
   }
-  next('/auth/login')
+  next('/')
 }
 
 const routes = [
