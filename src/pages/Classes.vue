@@ -51,13 +51,22 @@ import { defineComponent, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 
 export default defineComponent({
-  name: 'HomePage',
+  name: 'ClassesPage',
   setup () {
     const store = useStore()
 
-    onMounted(async () => console.log('Created'))
+    const getUserToken = computed(() => store.getters['auth/getUserToken'])
+    const getUserProfile = computed(() => store.getters['auth/getUserProfile'])
+
+    onMounted(async () => {
+      if (!getUserProfile.value.user_id) {
+        console.log(store.dispatch('auth/profile'))
+        // await store.dispatch('auth/profile')
+      }
+    })
     return {
-      getDoctorToken: computed(() => store.getters['auth/getUserToken'])
+      getUserToken,
+      getUserProfile
     }
   }
 })

@@ -1,9 +1,10 @@
+import { api } from 'src/boot/axios'
 import * as types from './mutation-types'
 
 const actions = {
   async register ({ commit }, formData) {
     commit(types.AUTH_REQUEST)
-    await this.$api
+    await api
       .post('/register', formData)
       .then(response => {
         localStorage.setItem('access_token', response.data.access_token)
@@ -16,8 +17,8 @@ const actions = {
   },
   async profile ({ commit, getters }) {
     commit(types.PROFILE_REQUEST)
-    this.$api.defaults.headers.Authorization = `Bearer ${getters.getUserToken}`
-    await this.$api.get(
+    api.defaults.headers.Authorization = `Bearer ${getters.getUserToken}`
+    await api.get(
       'profile'
     ).then((response) => {
       commit(types.PROFILE_SUCCESS, response.data.data)
@@ -25,7 +26,7 @@ const actions = {
   },
   async login ({ commit }, formData) {
     commit(types.AUTH_REQUEST)
-    await this.$api
+    await api
       .post('login', formData)
       .then(response => {
         if (response.data.error_code === 0) {
