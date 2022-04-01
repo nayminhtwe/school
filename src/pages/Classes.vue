@@ -47,25 +47,14 @@
 </template>
 
 <script>
-import { defineComponent, computed, onMounted } from 'vue'
-import { useStore } from 'vuex'
+import { defineComponent } from 'vue'
+import UserProfile from '../composables/UserProfile'
 
 export default defineComponent({
   name: 'ClassesPage',
   setup () {
-    const store = useStore()
-
-    const getUserToken = computed(() => store.getters['auth/getUserToken'])
-    const getUserProfile = computed(() => store.getters['auth/getUserProfile'])
-
-    onMounted(async () => {
-      if (!getUserProfile.value.user_id) {
-        console.log(store.dispatch('auth/profile'))
-        // await store.dispatch('auth/profile')
-      }
-    })
+    const { getUserProfile } = UserProfile()
     return {
-      getUserToken,
       getUserProfile
     }
   }
