@@ -27,6 +27,7 @@
         color="red"
         label="Log In"
         class="col-4 col-lg-1"
+        @click="login"
       />
     </div>
     <div class="q-pt-xl">
@@ -49,17 +50,41 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'LoginPage',
   setup () {
     const email = ref('')
     const password = ref('')
+    const banner = ref(false)
+
+    const store = useStore()
+
+    const login = async () => {
+      const formData = new FormData()
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+
+      await this.$store.dispatch('auth/login', formData)
+      if (this.status === 'success') {
+        await this.$store.dispatch('auth/profile')
+        this.$router.push('/')
+      }
+
+      if (this.status === 'error') {
+        this.banner = true
+      }
+    }
 
     return {
       email,
-      password
+      password,
+      login,
+      banner,
+      getDoctorToken: computed(() => store.getters['auth/getUserToken']),
+      status: computed(() => store.getters['auth/status'])
     }
   }
 })
