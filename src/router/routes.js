@@ -10,16 +10,11 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const ifAuthenticated = (to, from, next) => {
-  // if (store().getters['auth/isAuthenticated']) {
-  //   next()
-  //   return
-  // }
-  // next('/auth/login')
-  if (!store().getters['auth/isAuthenticated']) {
+  if (store().getters['auth/isAuthenticated']) {
     next()
     return
   }
-  next('/')
+  next('/auth/login')
 }
 
 const routes = [
@@ -35,7 +30,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: 'child/:child_id/classes/', component: () => import('src/pages/Classes.vue'), beforeEnter: ifAuthenticated },
+      { path: 'child/:child_id/classes/', component: () => import('src/pages/Classes.vue'), beforeEnter: ifAuthenticated, name: 'classes' },
       { path: '/', component: () => import('src/pages/Children.vue'), beforeEnter: ifAuthenticated }
     ]
   },

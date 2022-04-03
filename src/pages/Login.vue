@@ -3,6 +3,23 @@
     <div class="row justify-center q-py-lg">
       <div class="text-h3">Log In</div>
     </div>
+    <div>
+      <q-banner
+        inline-actions
+        class="text-black bg-red"
+        v-if="banner"
+      >
+        {{ message }}
+        <template v-slot:action>
+          <q-btn
+            flat
+            color="black"
+            icon="error"
+            @click="banner = false"
+          />
+        </template>
+      </q-banner>
+    </div>
     <div class="row justify-center">
       <q-input
         standout="bg-teal text-white"
@@ -14,6 +31,7 @@
     <div class="row justify-center">
       <q-input
         standout="bg-teal text-white"
+        type="password"
         v-model="password"
         label="Password"
         class="q-pa-md col-8 col-lg-4"
@@ -43,6 +61,7 @@
           color="primary"
           label="Register"
           class="col-4 col-lg-1"
+          @click="$router.push('/auth/register')"
         />
       </div>
     </div>
@@ -51,6 +70,7 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
 export default defineComponent({
@@ -60,21 +80,24 @@ export default defineComponent({
     const password = ref('')
     const banner = ref(false)
 
+    const router = useRouter()
     const store = useStore()
+
+    const status = computed(() => store.getters['auth/status'])
 
     const login = async () => {
       const formData = new FormData()
-      formData.append('email', this.email)
-      formData.append('password', this.password)
+      formData.append('email', email.value)
+      formData.append('password', password.value)
 
-      await this.$store.dispatch('auth/login', formData)
-      if (this.status === 'success') {
-        await this.$store.dispatch('auth/profile')
-        this.$router.push('/')
+      await store.dispatch('auth/login', formData)
+      if (status.value === 'success') {
+        await store.dispatch('auth/profile')
+        router.push('/')
       }
 
-      if (this.status === 'error') {
-        this.banner = true
+      if (status.value === 'error') {
+        banner.value = true
       }
     }
 
@@ -84,7 +107,8 @@ export default defineComponent({
       login,
       banner,
       getDoctorToken: computed(() => store.getters['auth/getUserToken']),
-      status: computed(() => store.getters['auth/status'])
+      message: computed(() => store.state.auth.message),
+      status
     }
   }
 })

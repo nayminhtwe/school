@@ -7,7 +7,7 @@ export default function UserProfile () {
   const getUserProfile = computed(() => store.getters['auth/getUserProfile'])
 
   onMounted(async () => {
-    if (!getUserProfile.value.user_id) {
+    if (!getUserProfile.value.id) {
       await store.dispatch('auth/profile')
     }
   })

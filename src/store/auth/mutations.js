@@ -22,7 +22,7 @@ const mutations = {
 
   [types.PROFILE_SUCCESS] (state, payload) {
     state.status = 'success'
-    state.current = payload
+    state.current = payload.user
   },
 
   [types.PROFILE_ERROR] (state) {

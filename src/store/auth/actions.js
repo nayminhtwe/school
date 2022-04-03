@@ -5,7 +5,7 @@ const actions = {
   async register ({ commit }, formData) {
     commit(types.AUTH_REQUEST)
     await api
-      .post('/register', formData)
+      .post('register', formData)
       .then(response => {
         localStorage.setItem('access_token', response.data.access_token)
         commit(types.AUTH_SUCCESS, response.data)
@@ -21,7 +21,7 @@ const actions = {
     await api.get(
       'profile'
     ).then((response) => {
-      commit(types.PROFILE_SUCCESS, response.data.data)
+      commit(types.PROFILE_SUCCESS, response.data)
     })
   },
   async login ({ commit }, formData) {
@@ -29,7 +29,7 @@ const actions = {
     await api
       .post('login', formData)
       .then(response => {
-        if (response.data.error_code === 0) {
+        if (response.data.error_code === '0') {
           localStorage.setItem('access_token', response.data.access_token)
           commit(types.AUTH_SUCCESS, response.data)
         }
