@@ -1,0 +1,6 @@
+export const ENROLL_REQUEST = 'ENROLL_REQUEST'
+export const ENROLL_SUCCESS = 'ENROLL_SUCCESS'
+export const ENROLL_ERROR = 'ENROLL_ERROR'
+export const LIST_REQUEST = 'LIST_REQUEST'
+export const LIST_SUCCESS = 'LIST_SUCCESS'
+export const LIST_ERROR = 'LIST_ERROR'

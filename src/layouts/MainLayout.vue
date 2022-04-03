@@ -45,19 +45,14 @@ import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
   {
-    title: 'Class',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
     title: 'Children',
     icon: 'child_care',
-    link: 'https://forum.quasar.dev'
+    link: 'http://localhost:8080/'
   },
   {
     title: 'Profile',
     icon: 'person',
-    link: 'https://forum.quasar.dev'
+    link: 'http://localhost:8080/profile'
   }
 ]
 

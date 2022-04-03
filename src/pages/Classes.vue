@@ -5,13 +5,14 @@
         class="my-card"
         flat
         bordered
+        v-for="item in getClasses"
+        :key="item.id"
       >
         <q-card-section horizontal>
           <q-card-section class="q-pt-xs">
-            <div class="text-overline">Overline</div>
-            <div class="text-h5 q-mt-sm q-mb-xs">Title</div>
+            <div class="text-h5 q-mt-sm q-mb-xs">{{ item.name }}</div>
             <div class="text-caption text-grey">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              {{ item.description }}
             </div>
           </q-card-section>
 
@@ -32,14 +33,31 @@
             icon="event"
           />
           <q-btn flat>
-            7:30PM
+            Seats : {{ item.seats }}
           </q-btn>
           <q-btn
             flat
             color="primary"
-            @click="onReserve(id)"
+            @click="onReserve(item.id)"
+            v-if="item.enrolled"
           >
-            Reserve
+            Unenroll
+          </q-btn>
+          <q-btn
+            flat
+            color="primary"
+            @click="onReserve(item.id)"
+            v-else-if="item.seats < 4"
+          >
+            Enroll
+          </q-btn>
+          <q-btn
+            flat
+            color="primary"
+            disabled
+            v-else
+          >
+            Full
           </q-btn>
         </q-card-actions>
       </q-card>
@@ -49,29 +67,54 @@
 
 <script>
 import { useRoute } from 'vue-router'
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, watch, computed, onMounted } from 'vue'
 import UserProfile from '../composables/UserProfile'
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'ClassesPage',
   setup () {
     const route = useRoute()
+    const store = useStore()
     const { getUserProfile } = UserProfile()
-    const userData = ref(0)
+    const status = computed(() => store.getters['classes/status'])
+    const getClasses = computed(() => store.getters['classes/getClasses'])
+    const userData = computed(() => route.params.child_id)
 
     watch(
       () => route.params.child_id,
       async newId => {
-        // userData.value = await fetchUser(newId)
-        userData.value = parseInt(newId)
+        if (newId) {
+          userData.value = parseInt(newId)
+          const formData = new FormData()
+          formData.append('child_id', userData.value)
+          await store.dispatch('classes/list', formData)
+        }
       }
     )
 
-    const onReserve = (id) => {
-      console.log(id, userData.value)
+    onMounted(async () => {
+      if (getClasses.value.length === 0) {
+        const formData = new FormData()
+        formData.append('child_id', userData.value)
+        await store.dispatch('classes/list', formData)
+      }
+    })
+
+    const onReserve = async (id) => {
+      const formData = new FormData()
+      formData.append('child_id', userData.value)
+      formData.append('class_id', id)
+      await store.dispatch('classes/enroll', formData)
+      if (status.value === 'success') {
+        const formData = new FormData()
+        formData.append('child_id', userData.value)
+        await store.dispatch('classes/list', formData)
+      }
     }
     return {
       getUserProfile,
+      getClasses,
       onReserve,
       userData
     }
