@@ -52,7 +52,7 @@ const linksList = [
   {
     title: 'Profile',
     icon: 'person',
-    link: 'http://localhost:8080/profile'
+    link: 'http://localhost:8080/#/profile'
   }
 ]
 
