@@ -35,8 +35,8 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '/', component: () => import('src/pages/Classes.vue'), beforeEnter: ifAuthenticated },
-      { path: '/children', component: () => import('src/pages/Children.vue'), beforeEnter: ifAuthenticated }
+      { path: 'child/:child_id/classes/', component: () => import('src/pages/Classes.vue'), beforeEnter: ifAuthenticated },
+      { path: '/', component: () => import('src/pages/Children.vue'), beforeEnter: ifAuthenticated }
     ]
   },
 

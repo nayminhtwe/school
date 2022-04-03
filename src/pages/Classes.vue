@@ -37,6 +37,7 @@
           <q-btn
             flat
             color="primary"
+            @click="onReserve(id)"
           >
             Reserve
           </q-btn>
@@ -47,15 +48,32 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
+import { defineComponent, ref, watch } from 'vue'
 import UserProfile from '../composables/UserProfile'
 
 export default defineComponent({
   name: 'ClassesPage',
   setup () {
+    const route = useRoute()
     const { getUserProfile } = UserProfile()
+    const userData = ref(0)
+
+    watch(
+      () => route.params.child_id,
+      async newId => {
+        // userData.value = await fetchUser(newId)
+        userData.value = parseInt(newId)
+      }
+    )
+
+    const onReserve = (id) => {
+      console.log(id, userData.value)
+    }
     return {
-      getUserProfile
+      getUserProfile,
+      onReserve,
+      userData
     }
   }
 })
