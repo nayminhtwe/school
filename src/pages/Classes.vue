@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { defineComponent, watch, computed, onMounted } from 'vue'
 import UserProfile from '../composables/UserProfile'
 import { useStore } from 'vuex'
@@ -75,6 +75,7 @@ export default defineComponent({
   name: 'ClassesPage',
   setup () {
     const route = useRoute()
+    const router = useRouter()
     const store = useStore()
     const { getUserProfile } = UserProfile()
     const status = computed(() => store.getters['classes/status'])
@@ -89,6 +90,8 @@ export default defineComponent({
           const formData = new FormData()
           formData.append('child_id', userData.value)
           await store.dispatch('classes/list', formData)
+        } else {
+          router.go(0)
         }
       }
     )
