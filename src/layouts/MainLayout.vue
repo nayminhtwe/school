@@ -47,12 +47,12 @@ const linksList = [
   {
     title: 'Children',
     icon: 'child_care',
-    link: 'http://localhost:8080/'
+    link: 'http://school.castlingmm.com/'
   },
   {
     title: 'Profile',
     icon: 'person',
-    link: 'http://localhost:8080/#/profile'
+    link: 'http://school.castlingmm.com/#/profile'
   }
 ]
 
