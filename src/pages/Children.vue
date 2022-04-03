@@ -118,7 +118,18 @@
             :props="props"
           >
             <q-td colspan="100%">
-              <div class="text-left">This is expand slot for row above: {{ props.row.name }}.</div>
+              <div
+                class="row"
+                v-for="item in props.row.enrolled"
+                :key="item.id"
+              >
+                <div class="col-6">
+                  Course : {{ item.name }}
+                </div>
+                <div class="col-6">
+                  SEATS : {{item.seats}}
+                </div>
+              </div>
             </q-td>
           </q-tr>
         </template>
